@@ -5,7 +5,7 @@
 Project Name: IceBreaker.AI
 Objective: 
 
-- Build an AI-powered platform to generate personalized cold emails tailored for job opportunities.
+- Build an AI-powered system to generate personalized cold emails tailored for job opportunities.
 - focus on creating genuine connections, showcasing interest, and standing out from generic templates.
   Target Users:
   •	Job Seekers (entry-level to executive roles)
@@ -94,3 +94,64 @@ Objective:
     •	Data Privacy Concerns: Ensure compliance with GDPR and data security regulations.
     •	LinkedIn API Limitations: Manage rate limits and potential scraping restrictions.
     •	Avoiding Over-Personalization: Maintain professionalism without being overly intrusive.
+
+
+
+#### Solution Approach:
+
+1. identify the job roles for which you're a top applicant
+2. fetch 5 HR contacts and 5 contacts with senior designation corresponding to the applicant job role
+3. fetch relevant company initiatives, events or news in correspondence to the applicant's profile
+4. generate persoanlized outreach emails
+
+- user input :
+  - user portfolio / resume
+    - start with user resume and extend it to user github and portfolio website or user linkedin
+  - target job role
+  - user's current YOE ( int )
+  - target list of companies
+- output : list of personalized email drafts
+- take the user input and identify relevant job roles from the target companies' career pages
+  - how to do this ?
+    - use web search + scraping with firecrawl
+      - search query : {company name} careers
+  - filter the search results to fetch the relevant
+- extract job details from the apply links
+- match jobs to your resume and filter out the most relevant job roles along with their company
+- identify potential contacts to which the applicant can reach out considering the following signals in the target company contacts:
+  * Role relevance to applicant's career goals
+  * Hiring authority level
+  * Activity status (recent posts/engagement)
+  * Shared backgrounds
+  * Engagement history with similar outreach
+
+
+#### Note:
+
+optimal outreach email length for job opportunities should be:
+
+150-200 words (3-4 short paragraphs) structured as follows:
+
+1. Opening (30-40 words)
+
+* Brief personal introduction
+* Specific connection point or shared interest
+* Clear purpose statement
+
+2. Value Proposition (50-60 words)
+
+* 1-2 relevant achievements/skills
+* Direct link to company's needs/goals
+* Brief mention of why this company specifically
+
+3. Call to Action (30-40 words)
+
+* Clear, specific request
+* Suggested next step
+* Flexibility in timing
+
+4. Closing (<20 words)
+
+* Brief appreciation
+* Professional sign-off
+* Full signature with contact details
