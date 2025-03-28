@@ -2,8 +2,8 @@
 
 1. **Overview**
 
-Project Name: IceBreaker.AI
-Objective: 
+`<Project Name: IceBreaker.AI>`
+**Objective:**
 
 - Build an AI-powered system to generate personalized cold emails tailored for job opportunities.
 - focus on creating genuine connections, showcasing interest, and standing out from generic templates.
@@ -21,7 +21,7 @@ Objective:
    •	Include icebreakers based on public data (e.g., LinkedIn, company websites or recent news about the company, problems the company is trying to solve ).
    •	Enable customization for tone, style, and email length.
    •	Provide actionable insights for follow-ups.
-4. **Key Features**
+6. **Key Features**
 
 4.1 User Input Section:
 	•	Job Role & Company Name: Role user is applying for and the company name.
@@ -95,14 +95,20 @@ Objective:
     •	LinkedIn API Limitations: Manage rate limits and potential scraping restrictions.
     •	Avoiding Over-Personalization: Maintain professionalism without being overly intrusive.
 
-
-
 #### Solution Approach:
 
-1. identify the job roles for which you're a top applicant
-2. fetch 5 HR contacts and 5 contacts with senior designation corresponding to the applicant job role
-3. fetch relevant company initiatives, events or news in correspondence to the applicant's profile
-4. generate persoanlized outreach emails
+1. input from the user --> cv pdf, desired job title ( optional - if not provided the agent will identify a pool of best suited job titles corresponding to the candidate resume ), target company type (optional, if not provided no preference, serve what u get from the web) --> start ups or mnc or t-1 vc firm backed companies like yc companies, accel, sequoia
+2. Parse the pdf, use structured parsing (maybe llamaparse ? or docling ?? dk, will decide) and store the candidate info in a db with fixed attributes
+3. identify the job titles / job roles for which candidate is a top applicant ( max 3 )
+4. fetch 5 HR contacts and 5 contacts with senior designation corresponding to the applicant job role
+5. fetch relevant company initiatives, events or news in correspondence to the applicant's profile
+6. generate persoanlized outreach emails
+7. serve the system as a cli tool ?
+   * why not an API ?
+     * API gateway timeout error chance.
+     * bad user experience, until the response is generated completely, user is in a waiting state
+     * request-response model are atomic in nature -->
+       * can send partial response as well by handling esceptions efficiently but not reliable
 
 - user input :
   - user portfolio / resume
@@ -124,7 +130,6 @@ Objective:
   * Activity status (recent posts/engagement)
   * Shared backgrounds
   * Engagement history with similar outreach
-
 
 #### Note:
 
