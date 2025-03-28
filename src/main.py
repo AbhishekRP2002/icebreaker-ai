@@ -7,9 +7,9 @@ import logging
 from dotenv import load_dotenv
 from llama_cloud_services import LlamaExtract
 from pydantic import BaseModel, Field
-from llama_cloud.core.api_error import ApiError
 from typing import Optional, List
 from rich.pretty import pprint
+from google import genai
 
 
 load_dotenv()
@@ -22,6 +22,7 @@ extractor = LlamaExtract(
     organization_id=os.getenv("LLAMA_CLOUD_ORG_ID"),
     project_id=os.getenv("LLAMA_CLOUD_PROJECT_ID"),
 )
+gemini_client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 
 class Education(BaseModel):
@@ -101,24 +102,32 @@ async def init_db():
         await conn.commit()
 
 
-async def parse_resume(pdf_path: str):
+async def parse_resume(pdf_path: str, model: BaseModel):
     logger.info(f"Extracting data from resume: {pdf_path}")
-    try:
-        existing_agent = extractor.get_agent(name="resume-screening")
-        if existing_agent:
-            extractor.delete_agent(existing_agent.id)
-    except ApiError as e:
-        if e.status_code == 404:
-            pass
-        else:
-            raise
-
-    extractor_agent = extractor.create_agent(
-        name="resume-screening", data_schema=CandidateResumeData
+    file = gemini_client.files.upload(
+        file=pdf_path, config={"display_name": pdf_path.split("/")[-1].split(".")[0]}
     )
-    resume_data = extractor_agent.extract(pdf_path)
-    pprint(resume_data)
-    return resume_data.data
+    prompt = """
+    You are an expert resume screening agent who has been tasked with extracting structured data about a candidate from their resume.
+    Extract the following information in JSON format:
+    - name: string
+    - email: string
+    - phone: string
+    - technical_skills: object containing programming_languages (array), frameworks (array), and skills (array)
+    - experience: array of objects containing company, title, description, start_date, and end_date
+    - projects: array of strings
+    - education: array of objects containing institution, degree, start_date, and end_date
+    - certifications: array of strings (optional)
+    - key_accomplishments: string (optional)
+    """
+    response = gemini_client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=[prompt, file],
+        config={"response_mime_type": "application/json", "response_schema": model},
+    )
+    pprint(response)
+    resume_data = response.parsed
+    return resume_data
 
 
 # store parsed data in sql db
@@ -132,15 +141,19 @@ async def store_in_db(data):
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
-                data["name"],
-                data["email"],
-                data["phone"],
-                json.dumps(data["technical_skills"].dict()),
-                json.dumps([exp.dict() for exp in data["experience"]]),
-                json.dumps(data["projects"]),
-                json.dumps([edu.dict() for edu in data["education"]]),
-                json.dumps(data.get("certifications")),
-                data.get("key_accomplishments"),
+                data.name,
+                data.email,
+                data.phone,
+                json.dumps(data.technical_skills.model_dump()),
+                json.dumps([exp.model_dump() for exp in data.experience]),
+                json.dumps(data.projects),
+                json.dumps([edu.model_dump() for edu in data.education]),
+                json.dumps(
+                    data.certifications if hasattr(data, "certifications") else None
+                ),
+                data.key_accomplishments
+                if hasattr(data, "key_accomplishments")
+                else None,
             ),
         )
         await conn.commit()
@@ -155,10 +168,9 @@ def cli(pdf_path):
 
 async def main(pdf_path):
     await init_db()
-    parsed_data = await parse_resume(pdf_path)
+    parsed_data = await parse_resume(pdf_path, CandidateResumeData)
     await store_in_db(parsed_data)
     click.echo("✅ Resume parsed and stored successfully!")
-    click.echo(json.dumps(parsed_data, indent=4))
 
 
 if __name__ == "__main__":
