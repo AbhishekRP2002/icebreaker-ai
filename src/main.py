@@ -197,8 +197,7 @@ async def generate_job_titles(
     return json.loads(response.text)
 
 
-async def interactive_resume_analysis():
-    """Interactive CLI wizard for resume analysis"""
+async def main():
     click.echo(style("🤖 Welcome to Icebreaker AI!\n", fg="green", bold=True))
 
     # Step 1: Get resume path
@@ -266,7 +265,7 @@ async def interactive_resume_analysis():
 def cli():
     """Interactive CLI tool to generate personalized cold emails tailored for your best matching job opportunities."""
     try:
-        asyncio.run(interactive_resume_analysis())
+        asyncio.run(main())
     except KeyboardInterrupt:
         click.echo(style("\n👋 Thanks for using Icebreaker AI!", fg="green"))
         return

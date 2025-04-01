@@ -99,7 +99,11 @@
 1. input from the user --> cv pdf, desired job title ( optional - if not provided the agent will identify a pool of best suited job titles corresponding to the candidate resume ), target company type (optional, if not provided no preference, serve what u get from the web) --> start ups or mnc or t-1 vc firm backed companies like yc companies, accel, sequoia
 2. Parse the pdf, use structured parsing (maybe llamaparse ? or docling ?? dk, will decide) and store the candidate info in a db with fixed attributes
 3. identify the job titles / job roles for which candidate is a top applicant ( max 3 )
-4. if target company type is given then, use them for fetching the job urls or else use normal 
+4. fetch job postings in structured format based on company type and location:
+   - define a deterministic workflow for now
+     - if company type is mncs or enterprise, use a set of predefined company job board urls to fetch the data
+     - if company type is startup, use yc and wellfound job board urls, for yc we need serp + scrape and for wellfound we need 2 levels of scraping --> maybe i can check here if compositional function calling can handle this use case or like sequential function calling ????
+     - if any is used, then use some default common job boards like linkedin, naukri, indeed, google jobs
 5. fetch 5 HR contacts and 5 contacts with senior designation corresponding to the applicant job role
 6. fetch relevant company initiatives, pain points if any, events or news in correspondence to the applicant's profile ( basically how your skills and experience can add value to their product / services )
 7. generate personalized outreach cold emails
