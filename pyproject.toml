@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "icebreaker-ai"
+version = "0.1.0"
+description = ""
+authors = ["Abhishek Ranjan <aviranjan444@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+llama-index = "^0.12.27"
+llama-cloud-services = "^0.6.9"
+langchain = "^0.3.22"
+google-genai = "^1.9.0"
+langchain-openai = "^0.3.11"
+langchain-google-vertexai = "^2.0.18"
+rich = "^14.0.0"
+aiosqlite = "^0.21.0"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
