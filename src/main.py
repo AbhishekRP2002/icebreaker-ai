@@ -159,18 +159,59 @@ async def store_in_db(data):
         await conn.commit()
 
 
+async def generate_job_titles(
+    resume_data: CandidateResumeData, given_job_title: str = None
+) -> List[str]:
+    prompt = ""
+    if given_job_title:
+        prompt = f"""Based on the candidate's experience, past projects and skills, suggest 2 more similar job titles to '{given_job_title}' 
+        which closely align with the candidate's profile making him an ideal feat for the job role.
+        Consider their:
+        - Technical skills: {resume_data.technical_skills.model_dump()}
+        - Experience: {[exp.model_dump() for exp in resume_data.experience]}
+        - Education: {[edu.model_dump() for edu in resume_data.education]}
+        Return only a JSON array of strings containing the job titles."""
+    else:
+        prompt = f"""Based on the candidate's experience, past projects and skills, suggest the top 3 job titles 
+        the candidate has the maximum change of getting interviewed. 
+        Consider their:
+        - Technical skills: {resume_data.technical_skills.model_dump()}
+        - Experience: {[exp.model_dump() for exp in resume_data.experience]}
+        - Education: {[edu.model_dump() for edu in resume_data.education]}
+        Return only a JSON array of strings containing the job titles."""
+
+    response = gemini_client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=[prompt],
+        config={"response_mime_type": "application/json"},
+    )
+
+    return json.loads(response.text)
+
+
 @click.command()
 @click.argument("pdf_path", type=click.Path(exists=True))
-def cli(pdf_path):
+@click.option(
+    "--job-title",
+    "-j",
+    help="Desired job title which you want to apply for",
+    required=False,
+)
+def cli(pdf_path, job_title):
     "CLI tool to parse resumes and store structured data in SQLite."
-    asyncio.run(main(pdf_path))
+    asyncio.run(main(pdf_path, job_title))
 
 
-async def main(pdf_path):
+async def main(pdf_path, job_title=None):
     await init_db()
     parsed_data = await parse_resume(pdf_path, CandidateResumeData)
     await store_in_db(parsed_data)
     click.echo("✅ Resume parsed and stored successfully!")
+    # Generate and display relevant job titles
+    suggested_jobs = await generate_job_titles(parsed_data, job_title)
+    click.echo("\n📋 Recommended Job Titles:")
+    for idx, job in enumerate(suggested_jobs, 1):
+        click.echo(f"{idx}. {job}")
 
 
 if __name__ == "__main__":
