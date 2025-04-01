@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, List
 from rich.pretty import pprint
 from google import genai
+from click import style
 
 
 load_dotenv()
@@ -80,6 +81,13 @@ class CandidateResumeData(BaseModel):
     key_accomplishments: Optional[str] = Field(
         description="Summarize the candidates highest achievements."
     )
+
+
+class CompanyPreferences(BaseModel):
+    company_type: str = Field(
+        description="Type of company (e.g., Startup, Enterprise, etc.)"
+    )
+    location: str = Field(description="Preferred location")
 
 
 async def init_db():
@@ -189,29 +197,82 @@ async def generate_job_titles(
     return json.loads(response.text)
 
 
-@click.command()
-@click.argument("pdf_path", type=click.Path(exists=True))
-@click.option(
-    "--job-title",
-    "-j",
-    help="Desired job title which you want to apply for",
-    required=False,
-)
-def cli(pdf_path, job_title):
-    "CLI tool to parse resumes and store structured data in SQLite."
-    asyncio.run(main(pdf_path, job_title))
+async def interactive_resume_analysis():
+    """Interactive CLI wizard for resume analysis"""
+    click.echo(style("🤖 Welcome to Icebreaker AI!\n", fg="green", bold=True))
 
+    # Step 1: Get resume path
+    while True:
+        pdf_path = click.prompt(
+            style("📄 Please enter the path to your resume (PDF format)", fg="green"),
+            type=click.Path(exists=True, file_okay=True, dir_okay=False, path_type=str),
+        )
+        if pdf_path.lower().endswith(".pdf"):
+            break
+        click.echo(style("❌ Please provide a valid PDF file!", fg="red"))
 
-async def main(pdf_path, job_title=None):
+    # Step 2: Initialize DB and parse resume
     await init_db()
+    click.echo(style("\n⏳ Parsing your resume...", fg="yellow"))
     parsed_data = await parse_resume(pdf_path, CandidateResumeData)
     await store_in_db(parsed_data)
-    click.echo("✅ Resume parsed and stored successfully!")
-    # Generate and display relevant job titles
+    click.echo(style("✅ Resume parsed successfully!\n", fg="green"))
+
+    # Step 3: Job preferences
+    wants_specific_job = click.confirm(
+        style(
+            "🎯 Do you have a specific job title in mind which you wanna apply for?",
+            fg="green",
+        ),
+        default=False,
+    )
+    job_title = None
+    if wants_specific_job:
+        job_title = click.prompt(
+            style("📋 Please enter the desired job title", fg="green")
+        )
+
+    # Step 4: Company preferences
+    click.echo(style("\n🏢 Let's gather your company preferences:", fg="bright_green"))
+    company_prefs = CompanyPreferences(
+        company_type=click.prompt(
+            "Company type",
+            type=click.Choice(["Startup", "Enterprise / MNCs", "Any"]),
+            default="Any",
+        ),
+        location=click.prompt("Preferred location", default="Remote"),
+    )
+
+    # Step 5: Generate and display job recommendations
+    click.echo(
+        style(
+            "\n⏳ Analyzing your profile and generating recommendations...", fg="yellow"
+        )
+    )
     suggested_jobs = await generate_job_titles(parsed_data, job_title)
-    click.echo("\n📋 Recommended Job Titles:")
+
+    click.echo("\n🎯 Recommended Job Titles:")
     for idx, job in enumerate(suggested_jobs, 1):
         click.echo(f"{idx}. {job}")
+
+    # Step 6: Additional analysis based on company preferences
+    click.echo("\n📊 Analysis Summary:")
+    click.echo(f"• Profile: {parsed_data.name}")
+    click.echo(f"• Target Company Type: {company_prefs.company_type}")
+    click.echo(f"• Preferred Location: {company_prefs.location}")
+
+
+@click.command()
+def cli():
+    """Interactive CLI tool to generate personalized cold emails tailored for your best matching job opportunities."""
+    try:
+        asyncio.run(interactive_resume_analysis())
+    except KeyboardInterrupt:
+        click.echo(style("\n👋 Thanks for using Icebreaker AI!", fg="green"))
+        return
+    except Exception as e:
+        click.echo(style(f"\n❌ An error occurred: {str(e)}", fg="red"))
+        return
 
 
 if __name__ == "__main__":
