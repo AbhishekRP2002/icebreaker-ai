@@ -98,7 +98,9 @@
 
 1. input from the user --> cv pdf, desired job title ( optional - if not provided the agent will identify a pool of best suited job titles corresponding to the candidate resume ), target company type (optional, if not provided no preference, serve what u get from the web) --> start ups or mnc or t-1 vc firm backed companies like yc companies, accel, sequoia
 2. Parse the pdf, use structured parsing (maybe llamaparse ? or docling ?? dk, will decide) and store the candidate info in a db with fixed attributes
-3. identify the job titles / job roles for which candidate is a top applicant ( max 3 )
+  - For now, using `llamaparse` but docling is also getting better so can add it in fallback maybe post testing -- NOTE
+- prepare an exhaustive list of job titles for the user to select from or the user can enter manually.
+3. identify the job titles / job roles for which candidate is a top applicant ( max 3 ) -- optional ( will look later into it )
 4. fetch job postings in structured format based on company type and location:
    - define a deterministic workflow for now
      - if company type is mncs or enterprise, use a set of predefined company job board urls to fetch the data
