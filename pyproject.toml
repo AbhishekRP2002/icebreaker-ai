@@ -10,7 +10,7 @@ python = "^3.12"
 llama-index = "^0.12.27"
 llama-cloud-services = "^0.6.9"
 langchain = "^0.3.22"
-google-genai = "^1.9.0"
+google-genai = {extras = ["aiohttp"], version = "^1.26.0"}
 langchain-openai = "^0.3.11"
 langchain-google-vertexai = "^2.0.18"
 rich = "^14.0.0"
@@ -19,6 +19,9 @@ fastapi = "^0.110.0"
 uvicorn = "^0.29.0"
 python-multipart = "^0.0.9"
 langgraph = "^0.5.3"
+pydantic = "^2.11.7"
+aiohttp = "^3.12.14"
+asyncio = "^3.4.3"
 
 
 [build-system]

@@ -1,0 +1,119 @@
+{
+  "receiver_details": {
+    "name": "Pranit Johnson",
+    "email": "pranit.johnson@uber.com",
+    "job_title": "Senior ML Engineer",
+    "company": "Uber"
+  },
+  "sender_details": {
+    "name": "ABHISHEK RANJAN PRUSTY",
+    "email": "aviranjan444@gmail.com",
+    "phone": "+91-7077354197",
+    "technical_skills": {
+      "programming_languages": [
+        "Python",
+        "C/C++",
+        "SQL"
+      ],
+      "frameworks": [
+        "PyTorch",
+        "LlamaIndex",
+        "TensorFlow",
+        "LangChain",
+        "scikit-learn",
+        "PySpark",
+        "FastAPI",
+        "Pandas",
+        "NumPy",
+        "XGBoost",
+        "HuggingFace",
+        "NLTK",
+        "LangGraph"
+      ],
+      "skills": [
+        "Vertex AI",
+        "Databricks",
+        "Redis",
+        "Elastic Search",
+        "Milvus",
+        "Docker",
+        "Kubernetes",
+        "Git",
+        "Linux",
+        "LLM Systems",
+        "GenAI Applications",
+        "MLOps",
+        "Classical ML Algorithms",
+        "NLP",
+        "Data-driven Problem-Solving",
+        "Software Engineering",
+        "Data Structures and Algorithms Analysis",
+        "Machine Learning",
+        "Operating Systems",
+        "API Testing",
+        "Prompt Engineering",
+        "Context Compression",
+        "Asynchronous Batch Processing",
+        "Guardrails",
+        "Semantic Caching",
+        "Few-Shot Learning",
+        "Chain of Thought",
+        "RegEx"
+      ]
+    },
+    "experience": [
+      {
+        "company": "Sprouts.ai",
+        "title": "ML Engineer",
+        "description": "Working on building a standalone multimodal outbound sales agent. AI Signals: Engineered scalable real-time RAG enrichment pipeline for open-domain question answering about companies by retrieving search results, LinkedIn + Apollo data, & scraped website data. Increased the API throughput to approx. 3000 signals/min and reliability by integrating asynchronous querying to LLM APIs with fallbacks via LangChain, & load balancing across multiple deployments (e.g. Azure/Vertex AI), with usage based async routing strategy. Hyper-Personalized Messaging (HPM): Built a system to empower SDRs & BDRs for generating AI-driven personalized LinkedIn messages & email using contact and company information from multiple sources to produce variations of emails with different ice breakers and value propositions tailored to the recipients profile. Implemented Mixture of Agents, context compression & asynchronous batch processing for message generation, reaching a throughput of nearly 1000 messages/min and improving email engagement by 35%. Optimized response quality & consistency by implementing guardrails on LLM generated response; reduced the latency by integrating semantic caching/context caching with efficient prompt engineering techniques cutting operational costs by 36%.",
+        "start_date": "June 2024",
+        "end_date": "Present"
+      },
+      {
+        "company": "Sprouts.ai",
+        "title": "Data Science Intern",
+        "description": "Productionized Sprouts Cataloger (an internal tool to standardize & catalog buyer persona attributes, specifically Job Titles & Seniority / Designation) using PySpark, refactored code for 3x faster processing, and standardized buyer persona datasets with enhanced taxonomy for improved search and filtering. Enhanced job title attribute extraction with NLP, RegEx, improving standardized format success by 35%, and boosting attributes' coverage by approx. 40% via reverse engineering and optimized lookup tables.",
+        "start_date": "December 2023",
+        "end_date": "May 2024"
+      },
+      {
+        "company": "Kusho.ai",
+        "title": "ML Engineer Intern",
+        "description": "Worked on building an AI agent for Autonomous API testing using OpenAPI spec, leveraging prompt chaining, RAG workflows, and fine-tuned LLMs (Llama-2-7b, Mixtral-8x7B) via PEFT and QLORA, achieving a 40% improvement in performance. Developed an internal tool for API test case validation with Few-Shot Learning and Chain of Thought, increasing accuracy by 30%.",
+        "start_date": "Sept 2023",
+        "end_date": "Jan 2024"
+      }
+    ],
+    "projects": [
+      "Agentic Code Review System: Developed an AI-powered GitHub Action that automatically reviews pull requests and labels issues using an LLM hosted on Azure OpenAI & the RoBERTa model",
+      "AI Powered Company Culture Analytics Tool: Developed a system that aims to provide insights & analysis reports about a company's culture by analyzing multiple textual data sources with RAG & NLP algorithms."
+    ],
+    "education": [
+      {
+        "institution": "National Institute of Technology, Rourkela",
+        "degree": "B.Tech in Computer Science and Engineering, CGPA:8.06",
+        "start_date": "Oct. 2020",
+        "end_date": "May 2024"
+      }
+    ],
+    "certifications": null,
+    "key_accomplishments": "Key accomplishments include designing and deploying production-grade LLM systems and GenAI applications, engineering scalable real-time RAG enrichment pipelines which increased API throughput to 3000 signals/min and improved reliability, building an AI-driven personalized messaging system that boosted email engagement by 35%, and optimizing LLM response quality while cutting operational costs by 36%. Additionally, productionized an internal tool (Sprouts Cataloger) for 3x faster processing, enhanced attribute extraction accuracy by 35-40%, and improved AI agent performance for API testing by 40%."
+  },
+  "job_information": {
+    "job_title": "ML Engineer II - Applied AI",
+    "company": "Uber",
+    "job_url": "https://www.uber.com/global/en/careers/list/144219",
+    "years_of_experience": "Master or PhD or equivalent experience in Computer Science, Engineering, Mathematics or a related field and 2 years of Software Engineering work experience, or 5 years Software Engineering work experience",
+    "location": "Bangalore, India",
+    "job_type": null,
+    "department": "Applied AI",
+    "required_skills": "Experience in programming with a language such as Python, C, C++, Java, or Go. Experience with ML packages such as Tensorflow, PyTorch, JAX, and Scikit-Learn. Experience with SQL and database systems such as Hive, Kafka, and Cassandra. Experience in the development, training, productionization and monitoring of ML solutions at scale.",
+    "preferred_skills": "Prior experience working with generative AI (e.g., LLMs, diffusion models) and integrating such technologies into end-user products. Experience in modern deep learning architectures and probabilistic models. Machine Learning, Computer Science, Statistics, or a related field with research or applied focus on large-scale ML systems.",
+    "job_description": "Applied AI is a horizontal AI team at Uber collaborating with business units across the company to deliver cutting-edge AI solutions for core business problems. We work closely with engineering, product and data science teams to understand key business problems and the potential for AI solutions, then deliver those AI solutions end-to-end. Key areas of expertise include Generative AI, Computer Vision, and Personalization. We are looking for a strong Senior ML engineer to be a part of a high-impact team at the intersection of classical machine learning, generative AI, and ML infrastructure. In this role, you\u2019ll be responsible for delivering Uber\u2019s next wave of intelligent experiences by building ML solutions that power core user and business-facing products. WHAT YOU\u2019LL DO: Solve business-critical problems using a mix of classical ML, deep learning, and generative AI. Collaborate with product, science, and engineering teams to execute on the technical vision and roadmap for Applied AI initiatives. Deliver high-quality, production-ready ML systems and infrastructure, from experimentation through deployment and monitoring. Adopt best practices in ML development lifecycle (e.g., data versioning, model training, evaluation, monitoring, responsible AI). Deliver enduring value in the form of software and model artifacts. BASIC QUALIFICATIONS: Master or PhD or equivalent experience in Computer Science, Engineering, Mathematics or a related field and 2 years of Software Engineering work experience, or 5 years Software Engineering work experience. Experience in programming with a language such as Python, C, C++, Java, or Go. Experience with ML packages such as Tensorflow, PyTorch, JAX, and Scikit-Learn. Experience with SQL and database systems such as Hive, Kafka, and Cassandra. Experience in the development, training, productionization and monitoring of ML solutions at scale. PREFERRED QUALIFICATIONS: Prior experience working with generative AI (e.g., LLMs, diffusion models) and integrating such technologies into end-user products. Experience in modern deep learning architectures and probabilistic models. Machine Learning, Computer Science, Statistics, or a related field with research or applied focus on large-scale ML systems.",
+    "experience_level": "Senior",
+    "salary_range": null,
+    "responsibilities": "Solve business-critical problems using a mix of classical ML, deep learning, and generative AI. Collaborate with product, science, and engineering teams to execute on the technical vision and roadmap for Applied AI initiatives. Deliver high-quality, production-ready ML systems and infrastructure, from experimentation through deployment and monitoring. Adopt best practices in ML development lifecycle (e.g., data versioning, model training, evaluation, monitoring, responsible AI). Deliver enduring value in the form of software and model artifacts.",
+    "benefits": [],
+    "remote_policy": "Hybrid"
+  }
+}

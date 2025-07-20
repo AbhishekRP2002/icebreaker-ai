@@ -1,0 +1,137 @@
+{
+  "receiver_details": {
+    "name": "Michael Sarang",
+    "email": "michael.sarang@microsoft.com",
+    "job_title": "Senior Software Engineer",
+    "company": "Microsoft"
+  },
+  "sender_details": {
+    "name": "Sumit Nainani",
+    "email": "sumit2810nainani@gmail.com",
+    "phone": "+918769472003",
+    "technical_skills": {
+      "programming_languages": [
+        "C",
+        "C++",
+        "Python",
+        "Javascript",
+        "Bash Scripting",
+        "GoLang",
+        "Java",
+        "SQL"
+      ],
+      "frameworks": [
+        "LangChain",
+        "React-native",
+        "NodeJs",
+        "Redux",
+        "SpringBoot",
+        "gRPC",
+        "MongoDB",
+        "PostgreSQL",
+        "MySQL",
+        "RedisDB",
+        "Git",
+        "Github",
+        "Jira",
+        "Azure AI Studio",
+        "Android Studio",
+        "Twilio",
+        "Docker",
+        "Kubernetes",
+        "CI/CD Pipeline",
+        "Apache Kafka",
+        "Azure DevOps",
+        "Amazon Web Services",
+        "CSS",
+        "Github Actions",
+        "OpenAI",
+        "GNU Debugger",
+        "MSys",
+        "Elasticsearch",
+        "JWT",
+        "Tornado Websocket",
+        "Django",
+        "Protobuff",
+        "Prometheus",
+        "Kube metric server"
+      ],
+      "skills": [
+        "Data structures and Algorithms",
+        "Database Management System",
+        "Operating System",
+        "Computer Network",
+        "DevOps",
+        "Debugging",
+        "System Design",
+        "Scalability",
+        "API Integration",
+        "Automation",
+        "Real-time Systems",
+        "Load Balancing",
+        "Cloud Solutions",
+        "UI/UX",
+        "Deep Linking",
+        "Static Code Analysis",
+        "Security",
+        "Compliance"
+      ]
+    },
+    "experience": [
+      {
+        "company": "GamesKraft",
+        "title": "Software Engineer",
+        "description": "Engineered improvements to the Android app's React Native UI/UX, decreasing average session load times by 15% and boosting user engagement by 20% through enhanced gameplay experiences. Solved critical bank KYC issues, reducing user rejection rates by 25%, and designed a free reward flow adopted by 50% of new users. Implemented deep linking for marketing campaigns, boosting user engagement.",
+        "start_date": "September 2024",
+        "end_date": "Present"
+      },
+      {
+        "company": "OYO ROOMS",
+        "title": "Software Engineer",
+        "description": "Deployed Sonarqube on Azure Kubernetes using 100% helm charts with Postgres for static code analysis and expanded with a CI/CD pipeline for automation. Implemented Dancenter CI/CD pipeline leveraging 90% Git SVN integration and workflow. Contributed in integration of API to automate the deletion of non-stay feedback entities, improving Lar's review process. Deployed real time translation support for live messages on global chat service and OYO OS, reducing real time translation load considering database size and schema. Developed and launched a DevSec knowledge bot for security and compliance, enhancing DevSec efficiency by integrating with Microsoft Teams and streamlining development using 70% Azure AI services.",
+        "start_date": "January 2024",
+        "end_date": "September 2024"
+      },
+      {
+        "company": "QUALCOMM TECHNOLOGIES",
+        "title": "Interim Software Intern",
+        "description": "Optimized GNU Debugger (GDB) for Snapdragon chips using 100% Msys for seamless builds; Composed and deployed cross-platform DLLs, boosting debugging efficiency via rigorous multi-chipset testing. Engineered Python 2.7 integration into GNU Debugger 11.2, refining its architecture for seamless interoperability with 100% support of Msys-ucrt64, ensuring a streamlined GNU build process.",
+        "start_date": "May 2023",
+        "end_date": "July 2023"
+      }
+    ],
+    "projects": [
+      "LOOK-SALON BOOKING MOBILE APPLICATION",
+      "CONSISTENCY HASH RING DEVELOPMENT"
+    ],
+    "education": [
+      {
+        "institution": "NIT ROURKELA",
+        "degree": "B.Tech | Computer Science",
+        "start_date": "2020",
+        "end_date": "2024"
+      }
+    ],
+    "certifications": [
+      "AWS Cloud Practitioner"
+    ],
+    "key_accomplishments": "Solved 800+ LeetCode problems with a 1632 rating, mastering 100% DSA concepts. Completed 2000+ DSA problems across platforms like GeeksforGeeks, Codeforces and InterviewBit. Achieved AWS Cloud Practitioner certification from GeeksForGeeks, enhancing cloud solution skills."
+  },
+  "job_information": {
+    "job_title": "Software Engineer II",
+    "company": "Microsoft",
+    "job_url": "https://jobs.careers.microsoft.com/global/en/job/1847896",
+    "years_of_experience": "3+ years",
+    "location": "Bangalore, Karnataka, India",
+    "job_type": "Full-Time",
+    "department": "Supply Chain Management Application Team",
+    "required_skills": "Desire to learn and build world class business applications; Relevant qualifications or practical experience in Computer Science, Engineering, Advanced Sciences or equivalent; 3+ years of software development experience in a professional environment; Proficient in both written and spoken English communication; Demonstrable coding, debugging, design, testing and problem-solving skills; Familiarity with business applications or a keen interest in learning them is essential; Experience as a full-stack or back-end software engineer.",
+    "preferred_skills": [],
+    "job_description": "Are you looking for an exciting opportunity to join Microsoft on our AI adventure in business applications? Do you ever wonder how software is used when you purchase something, ensuring it is available at the right time, in the right place, and tailored to just how you\u2019d like it? Perhaps you\u2019re curious about how AI is reshaping how people interact with software? If so, we\u2019d like to hear from you! We are hiring software engineers (full-stack, back-end) to join our supply chain management application team who are supporting customers today and designing for tomorrow. Familiarity with business applications or a keen interest in learning them is essential, as our progress hinges on recognizing our customers' elaborate circumstances, in conjunction with proficient software engineering and a continuous learning approach. At Microsoft India Development Center you will always be a part of something bigger. We bring people together today to build the solutions of tomorrow. We create intelligent business applications using AI and innovative solutions to enable every team to stay agile. We spark ideas, set ground-breaking standards, and encourage new talent to grow \u2013 with a positive focus on wellbeing, thriving, learning and growth. Our diverse team is a reflection of our inclusive values. The flexibility of our working environment, which includes hybrid opportunities, ensures effective collaboration regardless of where you are. Our product, Dynamics 365 Supply Chain Management, is a market leading service built atop Microsoft\u2019s highly extensible business applications platform. Our company operates supply chain services for some of the most distinguished companies worldwide, assisting in the delivery of their products with efficiency and insight. Our charter is to transform organizations to maximize business and employee impact in the moments that matter across the entire supply chain.",
+    "experience_level": "Mid-level",
+    "salary_range": null,
+    "responsibilities": "Develop features with focus on quality, usability & performance; Participate in live-site operations with emphasis on timely response, delivery & satisfaction for stakeholders; Collaborate across internal & external teams to innovate and enable continuous improvements.",
+    "benefits": "Industry leading healthcare; Educational resources; Discounts on products and services; Savings and investments; Maternity and paternity leave; Generous time away; Giving programs; Opportunities to network and connect.",
+    "remote_policy": "Hybrid (Up to 50% work from home)"
+  }
+}

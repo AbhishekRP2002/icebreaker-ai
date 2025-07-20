@@ -73,8 +73,10 @@ class CandidateResumeData(BaseModel):
     experience: List[Experience] = Field(
         description="Work experience details of the candidate"
     )
-    projects: List[str] = Field(description="List of projects mentioned in the resume")
-    education: List[Education] = Field(description="Education details of the candidate")
+    projects: List[str] = Field(
+        description="List of projects mentioned in the resume")
+    education: List[Education] = Field(
+        description="Education details of the candidate")
     certifications: Optional[List[str]] = Field(
         description="Certifications earned by the candidate"
     )
@@ -113,7 +115,8 @@ async def init_db():
 async def parse_resume(pdf_path: str, model: BaseModel):
     logger.info(f"Extracting data from resume: {pdf_path}")
     file = gemini_client.files.upload(
-        file=pdf_path, config={"display_name": pdf_path.split("/")[-1].split(".")[0]}
+        file=pdf_path, config={
+            "display_name": pdf_path.split("/")[-1].split(".")[0]}
     )
     prompt = """
     You are an expert resume screening agent who has been tasked with extracting structured data about a candidate from their resume.
@@ -129,9 +132,10 @@ async def parse_resume(pdf_path: str, model: BaseModel):
     - key_accomplishments: string (optional)
     """
     response = gemini_client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         contents=[prompt, file],
-        config={"response_mime_type": "application/json", "response_schema": model},
+        config={"response_mime_type": "application/json",
+                "response_schema": model},
     )
     pprint(response)
     resume_data = response.parsed
@@ -157,7 +161,8 @@ async def store_in_db(data):
                 json.dumps(data.projects),
                 json.dumps([edu.model_dump() for edu in data.education]),
                 json.dumps(
-                    data.certifications if hasattr(data, "certifications") else None
+                    data.certifications if hasattr(
+                        data, "certifications") else None
                 ),
                 data.key_accomplishments
                 if hasattr(data, "key_accomplishments")
@@ -172,7 +177,7 @@ async def generate_job_titles(
 ) -> List[str]:
     prompt = ""
     if given_job_title:
-        prompt = f"""Based on the candidate's experience, past projects and skills, suggest 2 more similar job titles to '{given_job_title}' 
+        prompt = f"""Based on the candidate's experience, past projects and skills, suggest 5 more similar job titles to '{given_job_title}' 
         which closely align with the candidate's profile making him an ideal feat for the job role.
         Consider their:
         - Technical skills: {resume_data.technical_skills.model_dump()}
@@ -189,7 +194,7 @@ async def generate_job_titles(
         Return only a JSON array of strings containing the job titles."""
 
     response = gemini_client.models.generate_content(
-        model="gemini-2.0-flash",
+        model="gemini-2.5-flash",
         contents=[prompt],
         config={"response_mime_type": "application/json"},
     )
@@ -204,7 +209,8 @@ async def main():
     while True:
         pdf_path = click.prompt(
             style("📄 Please enter the path to your resume (PDF format)", fg="green"),
-            type=click.Path(exists=True, file_okay=True, dir_okay=False, path_type=str),
+            type=click.Path(exists=True, file_okay=True,
+                            dir_okay=False, path_type=str),
         )
         if pdf_path.lower().endswith(".pdf"):
             break
@@ -232,7 +238,8 @@ async def main():
         )
 
     # Step 4: Company preferences
-    click.echo(style("\n🏢 Let's gather your company preferences:", fg="bright_green"))
+    click.echo(
+        style("\n🏢 Let's gather your company preferences:", fg="bright_green"))
     company_prefs = CompanyPreferences(
         company_type=click.prompt(
             "Company type",

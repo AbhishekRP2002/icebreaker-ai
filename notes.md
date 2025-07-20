@@ -166,3 +166,12 @@ optimal outreach email length for job opportunities should be:
 - Brief appreciation
 - Professional sign-off
 - Full signature with contact details
+
+## email generation service
+input required:
+- sender / job seeker info: parsed resume, linkedin scraped data ( optional ), github scraping to get the idea of real world projects build by the job seeker
+- receiver info : reciever full name or first name (if full name is not available), reciever job title ( optional maybe for now i dont need this info ? )
+- job opening details
+- company recent news or insights (sometimes, the roles and responsibilities give an idea about the team and the problem statement the team is solving)
+
+create 2 sample input json files, using 2 resumes and 2 job roles: mle and swe
