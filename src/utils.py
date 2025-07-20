@@ -8,14 +8,14 @@ from google import genai
 from pydantic import BaseModel, Field
 from rich.pretty import pprint  # noqa
 try:
-    from src.main import parse_resume, CandidateResumeData
+    from src.tasks.resume_parser import parse_resume, CandidateResumeData
     from src.tasks.job_posting_parser import JobPostingParser, create_job_info_from_parsed_data
 except ImportError:
     import sys
     import os
     sys.path.append(os.path.dirname(
         os.path.dirname(os.path.abspath(__file__))))
-    from main import parse_resume, CandidateResumeData
+    from tasks.resume_parser import parse_resume, CandidateResumeData
     from tasks.job_posting_parser import JobPostingParser, create_job_info_from_parsed_data
 
 logging.basicConfig(

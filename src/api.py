@@ -4,7 +4,7 @@ import os
 import tempfile
 import asyncio  # noqa: F401
 from pydantic import ValidationError
-from src.main import parse_resume, CandidateResumeData
+from src.tasks.resume_parser import parse_resume, CandidateResumeData
 from src.tasks.job_posting_parser import JobPostingParser
 
 app = FastAPI(title="Icebreaker AI",
