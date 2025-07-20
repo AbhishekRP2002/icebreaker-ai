@@ -5,6 +5,7 @@ import tempfile
 import asyncio  # noqa: F401
 from pydantic import ValidationError
 from src.main import parse_resume, CandidateResumeData
+from src.tasks.job_posting_parser import JobPostingParser
 
 app = FastAPI(title="Icebreaker AI",
               description="Icebreaker AI is a platform that helps you find the perfect job for you.",
@@ -33,6 +34,36 @@ async def parse_resume_endpoint(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"File handling failed: {str(e)}")
+
+
+@app.post("/parse_job_posting")
+async def parse_job_posting_endpoint(job_url: str):
+    """
+    Parse job posting from a given URL and return structured job information
+
+    Args:
+        job_url: URL of the job posting to parse
+
+    Returns:
+        JSONResponse: Structured job posting data
+    """
+    if not job_url or not job_url.strip():
+        raise HTTPException(
+            status_code=400, detail="Job URL is required and cannot be empty.")
+
+    try:
+        parser = JobPostingParser()
+
+        job_data = await parser.parse_job_posting(job_url)
+
+        return JSONResponse(content=job_data.model_dump())
+
+    except ValueError as ve:
+        raise HTTPException(
+            status_code=400, detail=f"Configuration error: {str(ve)}")
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Job posting parsing failed: {str(e)}")
 
 
 @app.get("/check-health")

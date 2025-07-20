@@ -175,3 +175,97 @@ input required:
 - company recent news or insights (sometimes, the roles and responsibilities give an idea about the team and the problem statement the team is solving)
 
 create 2 sample input json files, using 2 resumes and 2 job roles: mle and swe
+
+
+
+## Sample Outputs
+
+### Simple Email
+```
+Subject: ML Engineer II Opportunity at Uber
+
+Hi Pranit,
+
+I hope this email finds you well. I'm reaching out regarding the ML Engineer II - Applied AI position at Uber that I believe would be a great fit for my background.
+
+I'm currently working as an ML Engineer at Sprouts.ai, where I've been building scalable real-time RAG enrichment pipelines and AI-driven personalized messaging systems. My experience with PyTorch, TensorFlow, and production ML systems aligns well with Uber's requirements.
+
+I would love the opportunity to discuss how my skills in machine learning, LLM systems, and MLOps could contribute to Uber's Applied AI team.
+
+Best regards,
+ABHISHEK RANJAN PRUSTY
+```
+
+### Personalized Email
+```
+Subject: Senior ML Engineer with Uber's Applied AI Team
+
+Hi Pranit,
+
+I'm excited to reach out about the ML Engineer II - Applied AI position at Uber. Your work on Applied AI's horizontal team caught my attention, particularly your focus on Generative AI and Computer Vision.
+
+My experience at Sprouts.ai directly aligns with Uber's needs:
+- Built scalable real-time RAG enrichment pipelines achieving 3000 signals/min throughput
+- Developed AI-driven personalized messaging systems improving engagement by 35%
+- Implemented production ML systems with Vertex AI, Databricks, and Kubernetes
+
+I'm particularly drawn to Uber's work on intelligent experiences and would love to contribute to your next wave of ML solutions.
+
+Would you be open to a brief conversation about this opportunity?
+
+Best regards,
+ABHISHEK RANJAN PRUSTY
+```
+
+### Contextual Email
+```
+Subject: ML Engineer II - Applied AI at Uber
+
+Hi Pranit,
+
+I hope this email finds you well. I recently came across Uber's latest developments in autonomous vehicle technology and your team's work on Applied AI solutions, which inspired me to reach out about the ML Engineer II position.
+
+My background in building production ML systems at Sprouts.ai, where I engineered RAG pipelines processing 3000 signals/min and developed AI-driven messaging systems, aligns perfectly with Uber's Applied AI initiatives. I've been following your recent work on generative AI applications and believe my experience with PyTorch, TensorFlow, and MLOps could contribute significantly to your team.
+
+I'm particularly excited about Uber's focus on delivering cutting-edge AI solutions for core business problems and would love to discuss how my skills in LLM systems and GenAI applications could support your mission.
+
+Would you be available for a brief conversation next week?
+
+Best regards,
+ABHISHEK RANJAN PRUSTY
+```
+
+## Future Enhancements
+
+### Planned Features
+- [ ] Real-time company news integration
+- [ ] LinkedIn API integration for shared connections
+- [ ] Email template management system
+- [ ] A/B testing for email effectiveness
+- [ ] Analytics and tracking
+- [ ] Multi-language support
+
+### API Integrations
+- [ ] NewsAPI for company news
+- [ ] LinkedIn Marketing API
+- [ ] Twitter API for company updates
+- [ ] Crunchbase API for company information
+
+## 🛣️ **Roadmap**
+
+### **Phase 1** ✅
+- Resume parsing and storage
+- Job posting parsing
+- Basic email generation
+
+### **Phase 2** 🚧
+- Advanced personalization
+- External data integration
+- Contact discovery
+
+### **Phase 3** 📋
+- CRM integration
+- Analytics dashboard
+- Multi-language support
+- Voice-based outreach
+
