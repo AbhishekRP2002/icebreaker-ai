@@ -6,14 +6,25 @@ import json
 import asyncio
 from typing import Dict, List, Optional, Any, TypedDict
 from enum import Enum
+import os  # noqa
+from dotenv import load_dotenv
+import logging
 
 from langgraph.graph import StateGraph, START, END
-from langchain_anthropic import ChatAnthropic
+from langchain_anthropic import ChatAnthropic  # noqa
+from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.tools import tool
-from pydantic import BaseModel, Field
+
+load_dotenv()
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class EmailType(str, Enum):
@@ -45,8 +56,13 @@ class EmailState(TypedDict):
 class EmailGenerator:
     """Main class for generating personalized cold emails"""
 
-    def __init__(self, model_name: str = "claude-3-sonnet-20240229"):
-        self.model = ChatAnthropic(model=model_name, temperature=0.7)
+    def __init__(self):
+        # self.model = ChatAnthropic(model=model_name, temperature=0.2)
+        self.model = ChatOpenAI(
+            model="gpt-4.1", temperature=0.2, max_retries=3)
+        self.fallback_model = ChatGoogleGenerativeAI(
+            model="gemini-2.5-flash", temperature=0.2, max_retries=3)
+        self.email_gen_model = self.model.with_fallbacks([self.fallback_model])
         self.workflow = self._create_workflow()
 
     def _create_workflow(self) -> StateGraph:
@@ -54,7 +70,6 @@ class EmailGenerator:
 
         workflow = StateGraph(EmailState)
 
-        # Add nodes
         workflow.add_node("validate_input", self._validate_input)
         workflow.add_node("extract_context", self._extract_context)
         workflow.add_node("generate_simple_email", self._generate_simple_email)
@@ -64,11 +79,9 @@ class EmailGenerator:
                           self._generate_contextual_email)
         workflow.add_node("finalize_email", self._finalize_email)
 
-        # Add edges
         workflow.add_edge(START, "validate_input")
         workflow.add_edge("validate_input", "extract_context")
 
-        # Conditional routing based on email type
         workflow.add_conditional_edges(
             "extract_context",
             self._route_email_type,
@@ -89,21 +102,19 @@ class EmailGenerator:
     async def _validate_input(self, state: EmailState) -> EmailState:
         """Validate input data and set defaults"""
         try:
-            # Validate required fields
             required_fields = ["receiver_details",
                                "sender_details", "job_information"]
             for field in required_fields:
                 if field not in state or not state[field]:
+                    logger.error(f"Missing required field: {field}")
                     raise ValueError(f"Missing required field: {field}")
 
-            # Set default email type and tone if not provided
             if "email_type" not in state:
                 state["email_type"] = EmailType.SIMPLE
 
             if "tone" not in state:
                 state["tone"] = Tone.FRIENDLY
 
-            # Initialize contextual data
             if "contextual_data" not in state:
                 state["contextual_data"] = {}
 
@@ -117,7 +128,7 @@ class EmailGenerator:
         """Extract contextual information for personalized emails"""
         try:
             if state["email_type"] in [EmailType.PERSONALIZED, EmailType.CONTEXTUAL]:
-                # Extract key information for personalization
+
                 contextual_data = {
                     "sender_skills": state["sender_details"].get("technical_skills", {}),
                     "sender_experience": state["sender_details"].get("experience", []),
@@ -130,7 +141,7 @@ class EmailGenerator:
                     "receiver_title": state["receiver_details"].get("job_title", "")
                 }
 
-                # For contextual emails, we would add more data here
+                # additional data for contextual emails
                 if state["email_type"] == EmailType.CONTEXTUAL:
                     contextual_data.update({
                         "github_data": await self._fetch_github_data(state),
@@ -146,108 +157,24 @@ class EmailGenerator:
             state["error"] = f"Context extraction error: {str(e)}"
             return state
 
+    # TODO: Implement these functions
     async def _fetch_github_data(self, state: EmailState) -> Dict[str, Any]:
         """Fetch GitHub data using utility functions"""
-        from ..utils import GitHubAPI
 
-        try:
-            github_api = GitHubAPI()
-            username = state["sender_details"].get("github_username")
-
-            if not username:
-                return {
-                    "recent_commits": [],
-                    "top_languages": [],
-                    "popular_repos": [],
-                    "contribution_graph": {}
-                }
-
-            # Fetch user info, repos, and activity concurrently
-            user_info, repos, activity = await asyncio.gather(
-                github_api.get_user_info(username),
-                github_api.get_user_repos(username),
-                github_api.get_user_activity(username)
-            )
-
-            return {
-                "user_info": user_info,
-                "repositories": repos,
-                "activity": activity
-            }
-        except Exception as e:
-            print(f"Error fetching GitHub data: {e}")
-            return {
-                "recent_commits": [],
-                "top_languages": [],
-                "popular_repos": [],
-                "contribution_graph": {}
-            }
+        raise NotImplementedError(
+            "GitHub data fetching is not implemented yet")
 
     async def _fetch_company_news(self, state: EmailState) -> Dict[str, Any]:
         """Fetch company news using utility functions"""
-        from ..utils import CompanyNewsAPI, WebScraper
 
-        try:
-            company_name = state["job_information"].get("company", "")
-            if not company_name:
-                return {
-                    "recent_news": [],
-                    "tech_announcements": [],
-                    "company_events": []
-                }
-
-            async with CompanyNewsAPI() as news_api:
-                async with WebScraper() as scraper:
-                    news, tech_news, website_info, events = await asyncio.gather(
-                        news_api.search_company_news(company_name),
-                        news_api.get_company_tech_news(company_name),
-                        scraper.scrape_company_website(company_name),
-                        scraper.search_tech_events(company_name)
-                    )
-
-                    return {
-                        "general_news": news,
-                        "tech_news": tech_news,
-                        "website_info": website_info,
-                        "events": events
-                    }
-        except Exception as e:
-            print(f"Error fetching company news: {e}")
-            return {
-                "recent_news": [],
-                "tech_announcements": [],
-                "company_events": []
-            }
+        raise NotImplementedError(
+            "Company news fetching is not implemented yet")
 
     async def _fetch_linkedin_data(self, state: EmailState) -> Dict[str, Any]:
         """Fetch LinkedIn data using utility functions"""
-        from ..utils import LinkedInAPI
 
-        try:
-            linkedin_api = LinkedInAPI()
-            company_name = state["job_information"].get("company", "")
-
-            if not company_name:
-                return {
-                    "receiver_posts": [],
-                    "company_updates": [],
-                    "shared_connections": []
-                }
-
-            company_updates = await linkedin_api.get_company_updates(company_name)
-
-            return {
-                "company_updates": company_updates,
-                "receiver_posts": [],
-                "shared_connections": []
-            }
-        except Exception as e:
-            print(f"Error fetching LinkedIn data: {e}")
-            return {
-                "receiver_posts": [],
-                "company_updates": [],
-                "shared_connections": []
-            }
+        raise NotImplementedError(
+            "LinkedIn data fetching is not implemented yet")
 
     def _route_email_type(self, state: EmailState) -> EmailType:
         """Route to appropriate email generation based on type"""
@@ -257,17 +184,17 @@ class EmailGenerator:
         """Generate a simple, template-based email"""
         try:
             prompt = ChatPromptTemplate.from_messages([
-                SystemMessage(content="""You are an expert at writing professional cold emails for job referrals. 
+                SystemMessage(content="""You are an expert at writing professional cold emails for job referrals.
                 Generate a simple, professional email that introduces the candidate and expresses interest in the job opportunity.
                 Keep it concise and professional while maintaining the specified tone."""),
                 MessagesPlaceholder(variable_name="context"),
                 HumanMessage(content="""Generate a simple cold email with the following details:
-                
+
                 Receiver: {receiver_name} ({receiver_title} at {company})
                 Sender: {sender_name} ({sender_email})
                 Job: {job_title} at {company}
                 Tone: {tone}
-                
+
                 Requirements:
                 - Keep it under 150 words
                 - Use the specified tone
@@ -277,7 +204,7 @@ class EmailGenerator:
 
             context = self._build_context_message(state)
 
-            chain = prompt | self.model
+            chain = prompt | self.email_gen_model
             response = await chain.ainvoke({
                 "context": context,
                 "receiver_name": state["receiver_details"]["name"],
@@ -305,17 +232,17 @@ class EmailGenerator:
                 Use specific examples from their background to show why they're a great fit."""),
                 MessagesPlaceholder(variable_name="context"),
                 HumanMessage(content="""Generate a personalized cold email with the following details:
-                
+
                 Receiver: {receiver_name} ({receiver_title} at {company})
                 Sender: {sender_name} ({sender_email})
                 Job: {job_title} at {company}
                 Tone: {tone}
-                
+
                 Sender Skills: {sender_skills}
                 Sender Experience: {sender_experience}
                 Job Requirements: {job_requirements}
                 Job Preferred: {job_preferred}
-                
+
                 Requirements:
                 - Highlight 2-3 specific skills/experiences that match the job
                 - Reference specific projects or achievements
@@ -326,7 +253,7 @@ class EmailGenerator:
 
             context = self._build_context_message(state)
 
-            chain = prompt | self.model
+            chain = prompt | self.email_gen_model
             response = await chain.ainvoke({
                 "context": context,
                 "receiver_name": state["receiver_details"]["name"],
@@ -358,17 +285,17 @@ class EmailGenerator:
                 Use specific contextual hooks to show genuine interest and research."""),
                 MessagesPlaceholder(variable_name="context"),
                 HumanMessage(content="""Generate a highly contextual cold email with the following details:
-                
+
                 Receiver: {receiver_name} ({receiver_title} at {company})
                 Sender: {sender_name} ({sender_email})
                 Job: {job_title} at {company}
                 Tone: {tone}
-                
+
                 Contextual Data:
                 GitHub: {github_data}
                 Company News: {company_news}
                 LinkedIn: {linkedin_data}
-                
+
                 Requirements:
                 - Reference specific recent company news or events
                 - Mention relevant GitHub projects or contributions
@@ -381,7 +308,7 @@ class EmailGenerator:
 
             context = self._build_context_message(state)
 
-            chain = prompt | self.model
+            chain = prompt | self.email_gen_model
             response = await chain.ainvoke({
                 "context": context,
                 "receiver_name": state["receiver_details"]["name"],
@@ -412,7 +339,7 @@ class EmailGenerator:
         - Location: {state['job_information'].get('location', 'N/A')}
         - Department: {state['job_information'].get('department', 'N/A')}
         - Experience Level: {state['job_information'].get('experience_level', 'N/A')}
-        
+
         Sender Information:
         - Name: {state['sender_details'].get('name', 'N/A')}
         - Email: {state['sender_details'].get('email', 'N/A')}
@@ -433,18 +360,18 @@ class EmailGenerator:
                 SystemMessage(
                     content="Generate a compelling subject line for a cold email job referral."),
                 HumanMessage(content="""Generate a subject line for this email:
-                
+
                 Job: {job_title} at {company}
                 Sender: {sender_name}
                 Tone: {tone}
-                
+
                 Requirements:
                 - Keep it under 60 characters
                 - Be professional and compelling
                 - Avoid spam trigger words""")
             ])
 
-            chain = subject_prompt | self.model
+            chain = subject_prompt | self.email_gen_model
             subject_response = await chain.ainvoke({
                 "job_title": state["job_information"]["job_title"],
                 "company": state["job_information"]["company"],
@@ -474,7 +401,7 @@ class EmailGenerator:
             job_information=job_information,
             email_type=email_type,
             tone=tone,
-            contextual_data={},
+            contextual_data={},  # subject to change, based on user choice or use case
             generated_email=None,
             email_subject=None,
             error=None
@@ -497,11 +424,9 @@ class EmailGenerator:
             }
 
 
-# Example usage and testing functions
 async def test_email_generation():
     """Test the email generation with sample data"""
 
-    # Load sample data
     with open("data/sample_ip_email_gen_mle.json", "r") as f:
         mle_data = json.load(f)
 
@@ -510,8 +435,8 @@ async def test_email_generation():
 
     generator = EmailGenerator()
 
-    # Test simple email
-    print("=== Testing Simple Email ===")
+    # Test simple email with MLE role
+    print("=== Testing Simple Email for MLE role===")
     result = await generator.generate_email(
         receiver_details=mle_data["receiver_details"],
         sender_details=mle_data["sender_details"],
@@ -526,16 +451,14 @@ async def test_email_generation():
     else:
         print(f"Error: {result['error']}")
 
-    print("\n" + "="*50 + "\n")
-
-    # Test personalized email
-    print("=== Testing Personalized Email ===")
+    # Test simple email with SWE role
+    print("=== Testing Personalized Email for SWE role===")
     result = await generator.generate_email(
         receiver_details=swe_data["receiver_details"],
         sender_details=swe_data["sender_details"],
         job_information=swe_data["job_information"],
-        email_type=EmailType.PERSONALIZED,
-        tone=Tone.ENTHUSIASTIC
+        email_type=EmailType.SIMPLE,
+        tone=Tone.FRIENDLY
     )
 
     if result["success"]:
@@ -546,21 +469,21 @@ async def test_email_generation():
 
     print("\n" + "="*50 + "\n")
 
-    # Test contextual email
-    print("=== Testing Contextual Email ===")
-    result = await generator.generate_email(
-        receiver_details=mle_data["receiver_details"],
-        sender_details=mle_data["sender_details"],
-        job_information=mle_data["job_information"],
-        email_type=EmailType.CONTEXTUAL,
-        tone=Tone.FORMAL
-    )
+    # # Test personalized email with SWE role
+    # print("=== Testing Contextual Email ===")
+    # result = await generator.generate_email(
+    #     receiver_details=mle_data["receiver_details"],
+    #     sender_details=mle_data["sender_details"],
+    #     job_information=mle_data["job_information"],
+    #     email_type=EmailType.CONTEXTUAL,
+    #     tone=Tone.FORMAL
+    # )
 
-    if result["success"]:
-        print(f"Subject: {result['email_subject']}")
-        print(f"Body: {result['email_body']}")
-    else:
-        print(f"Error: {result['error']}")
+    # if result["success"]:
+    #     print(f"Subject: {result['email_subject']}")
+    #     print(f"Body: {result['email_body']}")
+    # else:
+    #     print(f"Error: {result['error']}")
 
 
 if __name__ == "__main__":

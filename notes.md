@@ -269,3 +269,7 @@ ABHISHEK RANJAN PRUSTY
 - Multi-language support
 - Voice-based outreach
 
+
+
+think about icp of the product
+maybe data collection followed by icp analysis or icp prediction ? -- identify the key datapoints or attributes that will define the icp of the product
